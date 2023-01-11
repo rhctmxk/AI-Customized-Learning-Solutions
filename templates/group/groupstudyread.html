@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+<!--    #notice{-->
+<!--        float:left;-->
+<!--        margin-right:10px;-->
+<!--        width:70%;-->
+<!--        height:400px;-->
+<!--    }-->
+<!--    #participate{-->
+<!--        width:29%;-->
+<!--        height:400px;-->
+<!--    }-->
+
+    #registerUser{
+        width:65px;
+    }
+
+    #rejectUser{
+        width:65px;
+        margin-left:20px;
+    }
+
+    #deleteUser{
+        width:65px;
+
+    }
+
+    #mentorUser{
+        width:65px;
+        margin-left:20px;
+    }
+
+    #user_name{
+        width:600px;
+    }
+
+    #user_name2{
+        width:600px;
+    }
+</style>
+<div>
+    <div id="notice" class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="d-flex justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    {{ post.pk_id }}. {{ post.title }}
+                </h6>
+                <h6 class="m-0 font-weight-bold text-primary">
+                    작성자: {{ post.userid.first_name }}
+                    <div class="text-xs">({{ post.created_date|date:'Y-m-d H:i:s' }})</div>
+                </h6>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-9">
+                    {{ post.content }}
+                </div>
+                <div class="col-md-3">
+                    <div class="card mb-0 py-0 border-left-dark">
+                        <div class="card-body">
+                            <p class="mb-0"><strong>모집 기간:</strong> {{ post.recruitment_start_date|date:'Y-m-d' }} ~ {{ post.recruitment_end_date|date:'Y-m-d' }}</p>
+                            <p class="mb-0"><strong>활동 기간:</strong> {{ post.activity_start_date|date:'Y-m-d' }} ~ {{ post.activity_end_date|date:'Y-m-d' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--    <div id="participate" class="card shadow mb-4">-->
+<!--        <div class="card-header py-3">-->
+<!--            <div class="d-flex justify-content-between">-->
+<!--                <h6 class="m-0 font-weight-bold text-primary">-->
+<!--                    참여인원목록-->
+<!--                </h6>-->
+<!--                <h6 class="m-0 font-weight-bold text-primary">-->
+<!--                </h6>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--            <div class="row">-->
+<!--                <div class="col-md-9">-->
+<!--&lt;!&ndash;                    {{ post.content }}&ndash;&gt;-->
+
+<!--                </div>-->
+<!--                <div class="col-md-3">-->
+<!--&lt;!&ndash;                    <div class="card mb-0 py-0 border-left-dark">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="card-body">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+<form method="POST" action="{% url 'group:groupstudy_read' post.pk_id %}">
+{% csrf_token %}
+{% if currentuser.username == post.userid.username %}
+<div class="d-md-inline-flex">
+        <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2" href="{% url 'group:groupstudy_modify' post.pk_id %}">
+            <i class="fas fa-pencil-ruler fa-sm text-white-100"></i> 수정
+        </a>
+        <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2" href="#" data-toggle="modal" data-target="#deleteModal1">
+            <i class="fas fa-trash fa-sm text-white-100"></i> 삭제
+        </a>
+</div>
+{% endif %}
+{% if group.is_waiting %}
+    <a class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2" href="{% url 'group:groupstudy_group_departicipate' post.pk_id %}">
+        <i class="fas fa-check-circle fa-sm text-white-100"></i> 신청취소
+    </a>
+{% elif group.is_registered %}
+    <a class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2 disabled">
+        <i class="fas fa-check-circle fa-sm text-white-100"></i> 승인됨
+    </a>
+{% elif not groupinfo %}
+    <a class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm mr-2 disabled">
+        <i class="fas fa-check-circle fa-sm text-white-100"></i> 삭제된 모임
+    </a>
+{% else %}
+    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2" href="{% url 'group:groupstudy_group_participate' post.pk_id %}">
+        <i class="fas fa-check-circle fa-sm text-white-100"></i> 신청
+    </a>
+{% endif %}
+
+</form>
+
+            <form method="POST" action="{% url 'group:group_user_manage' groupinfo.pk_id %}">
+                    {% csrf_token %}
+                        <div class="row mt-4">
+                        {% if currentuser == groupinfo.mentorid and is_waiting.count > 0 %}
+                            <div class="col-md-6">
+                                <div class="card shadow">
+                                    <a href="#waiting" class="card-header py-3" data-toggle="collapse"
+                                        role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                            <h6 class="m-0 font-weight-bold text-primary">신청자</h6>
+                                    </a>
+                                    <div class="collapse show" id="waiting">
+                                        <div class="card-body">
+
+                                        {% for iw in is_waiting %}
+                                            <div class="row" id="user_name2">
+                                                <div class="col-md-10">
+                                                        <h6><strong>{{ iw.userid.first_name }}</strong></h6>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit" id="registerUser" name="registerUser" value="{{ iw.userid.id }}">
+                                                        <i class="fas fa-check fa-sm text-white-50"></i> 승인
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <button class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" type="submit" id="rejectUser" name="rejectUser" value="{{ iw.userid.id }}">
+                                                        <i class="fas fa-stop fa-sm text-white-50"></i> 거절
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="col-md-6">
+                                <div class="card shadow">
+                                    <a href="#registered" class="card-header py-3" data-toggle="collapse"
+                                        role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                            <h6 class="m-0 font-weight-bold text-primary">참여자</h6>
+                                    </a>
+                                    <div class="collapse show" id="registered">
+                                        <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-10" >
+                                                <h6><strong>{{ groupinfo.mentorid.first_name }}</strong><small>[멘토]</small></h6>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        {% for ir in is_registered %}
+                                            {% if groupinfo.mentorid != ir.userid %}
+                                            <div class="row" id="user_name">
+                                                    <div class="col-md-10" >
+                                                            <h6><strong>{{ ir.userid.first_name }}</strong></h6>
+                                                    </div>
+
+                                                {% if currentuser == groupinfo.mentorid %}
+                                                    <div class="col-md-1">
+                                                        <button class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" type="submit" id="deleteUser" name="deleteUser" value="{{ ir.userid.id }}">
+                                                            <i class="fas fa-trash fa-sm text-white-50"></i> 삭제
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit" id="mentorUser" name="mentorUser" value="{{ ir.userid.id }}">
+                                                            <i class="fas fa-check fa-sm text-white-50"></i> 멘토
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <hr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+<div class="card shadow mb-4 mt-4">
+    <!-- Card Header - Accordion -->
+    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
+        role="button" aria-expanded="true" aria-controls="collapseCardExample">
+        <h6 class="m-0 font-weight-bold text-primary">댓글</h6>
+    </a>
+    <!-- Card Content - Collapse -->
+    <div class="collapse show" id="collapseCardExample">
+        <div class="card-body">
+            <form method="POST" action="{% url 'group:groupstudy_comment_write' post.pk_id %}">
+            {% csrf_token %}
+            <input type="text" class="form-control mb-4" id="communityComment" placeholder="댓글을 작성해주세요." name="comment" required>
+            <div class="d-flex justify-content-md-center">
+                <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit" id="commentWrite">
+                    <i class="fas fa-check fa-sm text-white-50"></i> 등록
+                </button>
+            </div>
+            </form>
+            {% for comment in comments %}
+            <hr class="sidebar-divider mt-4">
+            <div class="row">
+                <div class="col-md-9">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                    {% if comment.userid.last_name == post.userid.last_name %}
+                        <strong>{{ comment.userid.first_name }}</strong><span class="text-xs"> [글쓴이]</span>
+                    {% else %}
+                        <strong>{{ comment.userid.first_name }}</strong>
+                    {% endif %}
+                    <div class="text-xs">({{ comment.created_date|date:'Y-m-d H:i:s' }})</div>
+                    </h6>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="d-flex justify-content-end">
+                    {% if currentuser.last_name == comment.userid.last_name %}
+                    <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2" href="#" data-toggle="modal" data-target="#commentDeleteModal">
+                        <i class="fas fa-trash fa-sm text-white-100"></i> 삭제
+                    </a>
+                    <div class="modal fade" id="commentDeleteModal" tabindex="-1" role="dialog" aria-labelledby="commentDeleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">경고</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">삭제 하시겠습니까?</div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                                    <a class="btn btn-primary" href="{% url 'group:groupstudy_comment_delete' post.pk_id comment.pk_id %}">삭제</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-md">
+                <h6 class="mt-2">{{ comment.content }}</h6>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="deleteModal1" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">경고</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">해당 글을 삭제하면 해당 모임과 관련된 모든 정보가 삭제됩니다.<br> 그래도 삭제 하시겠습니까?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <a class="btn btn-primary" href="{% url 'group:group_delete' groupinfo.pk_id %}">삭제</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

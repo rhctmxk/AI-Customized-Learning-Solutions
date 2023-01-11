@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <style>
+        #omrtest{
+            float : left; margin-right : 10px;
+        }
+
+        header{
+            width:100%; height:100%;
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://cdn.pixabay.com/photo/2022/11/04/05/50/city-7569067_960_720.jpg");
+            background-position: center;
+            background-size: cover;
+        }
+        #title{
+            position:absolute;
+            left:55%;
+            top:50%;
+            transform:translate(-50%,-50%);
+        }
+
+        #title_text{
+            margin-bottom:30px;
+        }
+        #subtitle{
+            margin-bottom:80px;
+        }
+        .lead{
+            font-size:15px;
+        }
+        #select_value{
+<!--            float:left;-->
+        }
+        #div1{
+            width:1100px;
+        }
+
+        .thing1{
+            width:35%;
+            height:50px;
+            float:left;
+        }
+
+        .thing2{
+            float:left;
+            width:33%;
+            height:80%;
+            margin-left:50px;
+
+        }
+
+        .thing3{
+            float:left;
+            width:32%;
+            height:50px;
+
+        }
+        #sel{
+            margin-right:110px;
+        }
+
+    </style>
+    <script>
+        function getomr(){
+            alert("문제풀이 페이지로 이동합니다.");
+            document.getElementById("omrtest").submit();
+        }
+    </script>
+
+    <header class="bg-primary bg-gradient text-white">
+            <div class="container px-4 text-center" id="title">
+                <h1 class="fw-bolder" id="title_text">난이도별 문제풀이</h1>
+                <p class="lead">난이도와 문제개수, 과목을 선택해서 문제를 풀어볼 수 있습니다. </p>
+<!--                <p class="lead" id="subtitle">문제는 5개의 과목 100문제를 출제합니다</p>-->
+                    <form id="omrtest" action="/extest/omrtest/" method="post">
+                        {% csrf_token %}
+
+
+                        <div class="thing1"></div>
+                        <div class="thing2">
+                            <div align="left">
+                                  <input type="checkbox" id="subject1" name="subject" value="1" class="subject" checked>
+                                  <label for="subject1">1과목 : 소프트웨어 설계</label>
+                            </div>
+                            <div align="left">
+                                  <input type="checkbox" id="subject2" name="subject" value="2" class="subject" checked>
+                                  <label for="subject2">2과목 : 소프트웨어 개발</label>
+                            </div>
+                            <div align="left">
+                                  <input type="checkbox" id="subject3" name="subject" value="3" class="subject" checked>
+                                  <label for="subject3">3과목 : 데이터베이스 구축</label>
+                            </div>
+                            <div align="left">
+                                  <input type="checkbox" id="subject4" name="subject" value="4" class="subject" checked>
+                                  <label for="subject4">4과목 : 프로그래밍 언어 활용</label>
+                            </div>
+                            <div align="left">
+                                  <input type="checkbox" id="subject5" name="subject" value="5" class="subject" checked>
+                                  <label for="subject5">5과목 : 정보시스템 구축관리</label>
+                            </div>
+
+
+                        <div id="div1">
+                        </div>
+
+                        <div id="sel">
+                        <select name="select_value" id="select_value">
+                            <option value="상">상</option>
+                            <option value="중">중</option>
+                            <option value="하">하</option>
+                            <option value="랜덤">랜덤</option>
+                            <option value="맞춤형">맞춤형</option>
+                        </select>
+
+                        <input name="count" type="number" min="1" max="100">
+                        <input class="btn btn-lg btn-light" type="button" id="startbtn" onclick="getomr()" value="문제풀기">
+                        </div>
+
+                        </div>
+
+                        <div class="thing3"></div>
+
+
+                    </form>
+            </div>
+    </header>
+{% endblock %}

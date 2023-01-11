@@ -1,0 +1,325 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Jua', sans-serif;
+        }
+    </style>
+    <style>
+        html, body { margin: 0; padding: 0; height: 100%; font-size:12px;}
+
+        .header { width: 100%; height: 10%; background: #5882FA; border-bottom: 1px solid; border-color:black;}
+
+        .nav { width: 13%; height: 80%; float: left; background: #5882FA;}
+
+        .section { width: 70%; height: 80%; float: left;
+        background: white; color:black; overflow:auto;}
+
+        .aside { width: 17%; height: 80%; float: left; overflow:auto;
+        background: #5882FA; color:white;}
+
+        .footer { width: 100%; height: 10%; clear: both; background: #5882FA; border-top: 1px solid; border-color:black;}
+
+        .left-ol{
+         float:left;
+            margin: 7px 0px;
+        }
+
+        .left_ul{
+        float:left;
+            padding: 0;
+        }
+
+        .ul{
+            height: 33%; margin-bottom : 20px;
+        }
+
+        .ol{
+            margin : 5px;
+        }
+
+        .div1{
+            height : 80%; width: 50%;  float: left;
+        }
+
+        .div2{
+            height : 80%; width: 50%;  float: left;
+        }
+
+        .div3{
+            height : 20%; padding-top: 10px;
+        }
+
+        .que{
+            margin-top : 20px;
+        }
+
+        thead {
+            background-color:#cecece;
+        }
+
+        .content {
+            max-width:500px;
+            margin: auto;
+            padding:10px;
+        }
+
+        .board {
+            width: 100%
+        }
+
+        .even_bgcolor {
+            background-color:#e8efff;
+        }
+
+        .pagination {
+            display: flex;
+        }
+
+        .current {
+            font-weight: bold;
+        }
+
+        a {
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .abutton {
+            background-color: #e6e6ff;
+            color: #7b7b7b;
+            font-size: small;
+        }
+
+        .btn_choice{
+            float:left;
+            margin-top : 20px;
+        }
+
+        .btn_class{
+            float:left;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header"></header>
+<nav class="nav">
+
+                    <div class="col-lg-2 col-md-6">
+            <img id="img" src="{% url 'emotion:VidFeed' %}"  height="200" width="200" onclick="openModal();currentSlide(1)" class="hover-shadow">
+          </div>
+</nav>
+{% with que_check=1 %}
+
+
+<script>
+    var que_check = 1;
+    var que_select = [];
+
+    function previous_btn(){
+            que_check = que_check - 11;
+    }
+
+    function next_btn(){
+            que_check = que_check + 1;
+
+    }
+</script>
+
+
+</script>
+
+<section class="section">
+
+<!--    {{context.que}}-->
+    {# if page_obj #}
+        <div class="div1">
+        {% for data in exercise %}
+            {% if forloop.counter == 4 %}
+                </div><div class="div2">
+            {% endif%}
+
+    <div id = "que1" class = "que"><p href="{{que.0}}">{{ forloop.counter }}번. {{ data.content }}</p></div>
+    <ol class="ol"><input type='radio'
+                 name = "{{forloop.counter}}"
+                 value = 1
+                 onclick='getanswer(event,this.name)'/>1번. {{data.ex1}}</ol>
+      <ol class="ol"><input type='radio'
+                 name = "{{forloop.counter}}"
+                 value = 2
+                 onclick='getanswer(event,this.name)'/>2번. {{data.ex2}}</ol>
+      <ol class="ol"><input type='radio'
+                 name = "{{forloop.counter}}"
+                 value = 3
+                 onclick='getanswer(event,this.name)'/>3번. {{data.ex3}}</ol>
+      <ol class="ol"><input type='radio'
+                 name = "{{forloop.counter}}"
+                 value = 4
+                 onclick='getanswer(event,this.name)'/>4번. {{data.ex4}}</ol>
+    <script>
+        que_check = que_check + 1;
+
+        var ele = document.getElementsByName("{{data.5}}");
+        var radio_check = {{data.6}}
+
+        ele[radio_check-1].checked = true;
+    </script>
+    {% endfor %}
+    {# endif #}
+    </div>
+
+    </div>
+
+</section>
+
+<aside class="aside">
+    <ul class="left_ul">
+        <script>var pic_quecheck = 0;</script>
+    {% for data in exercise %}
+        <ol class="left-ol">{{forloop.counter}}번. <img value = 1 onclick='pics_ans(event, this.id)' id = "{{forloop.counter}}_number1" name = "" class = "1_number" src="/static/extest/number1.jpg"><img value = 2 onclick='pics_ans(event, this.id)' id = "{{forloop.counter}}_number2" class = "1_number" src="/static/extest/number2.jpg"><img value = 3 onclick='pics_ans(event, this.id)' id = "{{forloop.counter}}_number3" class = "1_number" src="/static/extest/number3.jpg"><img value = 4 onclick='pics_ans(event, this.id)' id = "{{forloop.counter}}_number4" class = "1_number" src="/static/extest/number4.jpg"></ol>
+        <script> pic_quecheck += 1;</script>
+    {% endfor %}
+
+    </ul>
+    <div class = "btn_choice">
+        <ol class="btn_class"><button class="btn btn-success btn-sm" type="button" id = "cancel_btn" onclick="cancel()">취소하기</button></ol>
+        <ol class="btn_class"><button class="btn btn-success btn-sm" type="button" id = "submit_btn" onclick="result()">제출하기</button></ol>
+    </div>
+{% endwith %}
+
+</aside>
+
+<footer class="footer">
+
+</footer>
+
+    <form id="cancle_omr" action="{% url 'extest:cancle_omr' %}" method="post">
+        {% csrf_token %}
+    </form>
+    <form id="result_omr" action="{% url 'extest:result_omr' %}" method="post">
+        {% csrf_token %}
+    </form>
+
+<script> var num = 0;</script>
+
+
+
+<script>
+
+    var question1 = 0;
+    var question2 = 0;
+    var question3 = 0;
+    var question4 = 0;
+    var question5 = 0;
+    var question6 = 0;
+
+
+    function getanswer(event, name){
+        var num = event.target.value;
+        var ele = document.getElementsByName(name);
+        var count = ele.length;
+
+        for(var i=0; i < ele.length; i++) {
+            ele[i].checked = false;
+        }
+
+        for(var i=1; i < ele.length+1; i++) {
+            document.getElementById(name + '_number' + i).src="/static/extest/number" + i + ".jpg"
+        }
+
+        if(num == 1){
+            ele[0].checked = true;
+            document.getElementById(name + '_number1').src="/static/extest/number_checked.jpg"
+        }
+        else if(num == 2){
+            ele[1].checked = true;
+            document.getElementById(name + '_number2').src="/static/extest/number_checked.jpg"
+        }
+        else if(num == 3){
+            ele[2].checked = true;
+            document.getElementById(name + '_number3').src="/static/extest/number_checked.jpg"
+        }
+        else if(num == 4){
+            ele[3].checked = true;
+            document.getElementById(name + '_number4').src="/static/extest/number_checked.jpg"
+        }
+    }
+
+    function pics_ans(event, id){
+        var num = event.target.value;
+        var eleid = id.split('_',1);
+        var eleid2 = id.split('r',2);
+
+        var ele = document.getElementsByName(eleid[0]);
+        var count = ele.length;
+
+        for(var i=0; i < ele.length; i++) {
+            ele[i].checked = false;
+        }
+
+        for(var i=1; i < ele.length+1; i++) {
+            document.getElementById(eleid[0] + '_number' + i).src="/static/extest/number" + i + ".jpg";
+        }
+
+        eleid = Number(eleid);
+
+        if(eleid2[1] == '1'){
+            ele[0].checked = true;
+         }
+         else if(eleid2[1] == '2'){
+            ele[1].checked = true;
+         }
+         else if(eleid2[1] == '3'){
+            ele[2].checked = true;
+         }
+         else if(eleid2[1] == '4'){
+            ele[3].checked = true;
+         }
+
+        document.getElementById(id).src="/static/extest/number_checked.jpg"
+
+    }
+
+    function cancel() {
+         if (confirm("시험을 종료하시겠습니까?")){
+               alert("종료하였습니다.");
+               document.getElementById("cancle_omr").submit();
+           } else {
+               alert("취소 버튼을 눌렀습니다.");
+           }
+    }
+
+    function result() {
+         if (confirm("시험지를 제출하시겠습니까?")){
+               alert("제출을 완료 하였습니다.");
+               document.getElementById("result_omr").submit();
+           } else {
+
+           }
+    }
+  </script>
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>AYU</title>
+<script src="/static/pdf.js"></script>
+     <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
+         <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Jua', sans-serif;
+        }
+    </style>
+<script src="/static/pdf.worker.js"></script>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<input type="hidden" id="num" name="num" value={{ num }}>
+<script>
+
+var url = '/static/2020정보처리기사필기(2과목).pdf';
+var a = parseInt(document.getElementById('num').value);
+var pdfDoc = null,
+    pageNum = a,
+    pageRendering = false,
+    pageNumPending = null,
+    scale = 0.8;
+var canvas = null;
+var ctx = null;
+onload=function(){
+    canvas = document.getElementById('the-canvas'),
+    ctx = canvas.getContext('2d');
+
+  document.getElementById('next').addEventListener('click', onNextPage);
+  document.getElementById('prev').addEventListener('click', onPrevPage);
+ /**
+  * Asynchronously downloads PDF.
+  */
+ pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+   pdfDoc = pdfDoc_;
+   document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+   // Initial/first page rendering
+   renderPage(pageNum);
+ });
+
+}
+
+
+
+/**
+ * Get page info from document, resize canvas accordingly, and render page.
+ * @param num Page number.
+ */
+function renderPage(num) {
+  pageRendering = true;
+  // Using promise to fetch the page
+  pdfDoc.getPage(num).then(function(page) {
+    var viewport = page.getViewport({scale: 1.5});
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    // Render PDF page into canvas context
+    var renderContext = {
+      canvasContext: ctx,
+      viewport: viewport
+    };
+    var renderTask = page.render(renderContext);
+
+    // Wait for rendering to finish
+    renderTask.promise.then(function() {
+      pageRendering = false;
+      if (pageNumPending !== null) {
+        // New page rendering is pending
+        renderPage(pageNumPending);
+        pageNumPending = null;
+      }
+    });
+  });
+
+  // Update page counters
+  document.getElementById('page_num').textContent = num;
+
+  $('button[name=PrePage]').attr('value',num);
+  $('button[name=PostPage]').attr('value',num);
+}
+
+/**
+ * If another page rendering in progress, waits until the rendering is
+ * finised. Otherwise, executes rendering immediately.
+ */
+function queueRenderPage(num) {
+  if (pageRendering) {
+    pageNumPending = num;
+  } else {
+    renderPage(num);
+  }
+}
+
+/**
+ * Displays previous page.
+ */
+function onPrevPage() {
+  if (pageNum <= 1) {
+    return;
+  }
+  pageNum--;
+  queueRenderPage(pageNum);
+}
+{#document.getElementById('prev').addEventListener('click', onPrevPage);#}
+
+/**
+ * Displays next page.
+ */
+function onNextPage() {
+  if (pageNum >= pdfDoc.numPages) {
+    return;
+  }
+  pageNum++;
+  queueRenderPage(pageNum);
+}
+
+</script>
+
+<style type="text/css">
+#the-canvas {
+  border: 1px solid black;
+  direction: ltr;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    height: 730px;
+}
+
+ * {
+        font-size: 16px;
+        font-family: Consolas, sans-serif;
+      }
+      textarea {
+        width: 505px;
+        height: 628px;
+          resize: none;
+            background-image:
+    linear-gradient(to right, white 10px, transparent 10px),
+    linear-gradient(to left, white 10px, transparent 10px),
+    repeating-linear-gradient(white, white 30px, #ccc 30px, #ccc 31px, white 31px);
+  line-height: 31px;
+          padding: 8px 10px;
+      }
+</style>
+
+ </head>
+ <body>
+<div>
+    <div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button id="prev" value="" class="btn btn-primary" name="PrePage">이전페이지</button>
+        <span>Page: <span id="page_num" ></span> / <span id="page_count"></span></span>
+  <button id="next" value="" class="btn btn-primary" name="PostPage">다음페이지</button>
+<input name="count" type="number" placeholder="원하는 페이지를 입력"  min="1" max="page_count">
+        {% if user_note.dib == 1 %}
+        <button class="btn btn-link text-danger" name="checkeddib" value="1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+          <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+        </svg>
+      </button>
+        {% else %}
+<button class="btn btn-link text-danger" name="checkeddib" value="0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16">
+          <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+        </svg>
+      </button>
+        {% endif %}
+
+<div>
+<canvas id="the-canvas"></canvas>
+      <div style="border: 1px dotted; border-radious: 5px; padding: 10px; position:absolute; top:39px; right:40px;">
+          {% csrf_token %}
+
+      <textarea name="note">{{ user_note.note }}</textarea>
+
+          <input type="hidden" id="num" name="num" value={{ num }}>
+      <p><input type="submit" value="저장"></p>
+
+    </div>
+    </div>
+</form>
+</div>
+
+ </body>
+</html>
+

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+        {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
+    <script>
+        window.setTimeout(function() {
+        $(".alert-auto-dismissible").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); }); }, 4000);
+    </script>
+    {% endif %}
+    <!-- DataTales Example -->
+    <form method="POST" action="{% url 'group:group_modify' pk_id %}">
+        {% csrf_token %}
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <div class="d-flex justify-content-between">
+                    <h4 class="m-0 font-weight-bold text-primary">글쓰기</h4>
+                    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit">
+                        <i class="fas fa-upload fa-sm text-white-50"></i> 수정하기
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-9">
+                        <input type="text" class="form-control mb-4" id="communityTitle" placeholder="제목" name="title"
+                               value="{{ title }}">
+                        <textarea class="form-control mb-4" rows="20" id="communityContent" placeholder="내용"
+                                  name="content">{{ content }}</textarea>
+                    </div>
+                    <div class="col-md-3">
+                        <h6>모집 기간</h6>
+                        <div class="d-flex justify-content-center">
+                            <div class="item m-1">
+                                <input type="date" class="form-control mb-4" id="recruitment_start_date"
+                                       name="recruitStartDate" value="{{ recruit_start|date:'Y-m-d' }}">
+                            </div>
+                            <div class="item m-1">
+                                ~
+                            </div>
+                            <div class="item m-1">
+                                <input type="date" class="form-control mb-4" id="recruitment_end_date"
+                                       name="recruitEndDate" value="{{ recruit_end|date:'Y-m-d' }}">
+                            </div>
+                        </div>
+
+                        <h6>활동 기간</h6>
+                        <div class="d-flex justify-content-center">
+                            <div class="item m-1">
+                                <input type="date" class="form-control mb-4" id="activity_start_date"
+                                       name="activityStartDate" value="{{ activity_start|date:'Y-m-d' }}">
+                            </div>
+                            <div class="item m-1">
+                                ~
+                            </div>
+                            <div class="item m-1">
+                                <input type="date" class="form-control mb-4" id="activity_end_date"
+                                       name="activityEndDate" value="{{ activity_end|date:'Y-m-d' }}">
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+{% endblock %}

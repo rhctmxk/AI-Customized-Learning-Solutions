@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+    <script>
+        function abilitytest() {
+            alert("레벨테스트 페이지로 이동합니다.");
+            document.getElementById("abilitytest").submit();
+        }
+    </script>
+    <script>
+        const label = document.querySelector('.label');
+        const options = document.querySelectorAll('.optionItem');
+        const handleSelect = function (item) {
+            label.innerHTML = item.textContent;
+            label.parentNode.classList.remove('active');
+        }
+        options.forEach(function (option) {
+            option.addEventListener('click', function () {
+                handleSelect(option)
+            })
+        })
+
+        label.addEventListener('click', function () {
+            if (label.parentNode.classList.contains('active')) {
+                label.parentNode.classList.remove('active');
+            } else {
+                label.parentNode.classList.add('active');
+            }
+        });
+    </script>
+    <style>
+        select::-ms-expand {
+            display: none;
+        }
+
+        select {
+            -o-appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            color: white;
+        }
+
+        .select {
+            width: 150px;
+            height: 35px;
+            background: url('https://freepikpsd.com/media/2019/10/down-arrow-icon-png-7-Transparent-Images.png') calc(100% - 5px) center no-repeat;
+            background-size: 20px;
+            padding: 5px 30px 5px 10px;
+            border-radius: 4px;
+            outline: 0 none;
+        }
+
+        .select option {
+            background: black;
+            color: #fff;
+            padding: 3px 0;
+        }
+
+        .select option:hover {
+            background: rgb(58, 58, 58)
+        }
+
+
+        header {
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://cdn.pixabay.com/photo/2022/11/04/05/50/city-7569067_960_720.jpg");
+            background-position: center;
+            background-size: cover;
+        }
+
+        #title {
+            position: absolute;
+            left: 55%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #title_text {
+            margin-bottom: 30px;
+        }
+
+        #subtitle {
+            margin-bottom: 80px;
+        }
+
+        .lead {
+            font-size: 15px;
+        }
+
+        .things {
+        }
+
+        .thing1 {
+            width: 35%;
+            height: 80px;
+            float: left;
+        }
+
+        .thing2 {
+            float: left;
+            width: 28%;
+            height: 100%;
+        }
+
+        .thing3 {
+            float: left;
+            width: 32%;
+            height: 80px;
+        }
+
+        #btn {
+            margin-top: 20px;
+        }
+    </style>
+
+    <link href="static/extest/css/styles.css" rel="stylesheet"/>
+
+    <header class="bg-primary bg-gradient text-white">
+        <div class="container px-4 text-center" id="title">
+            <h1 class="fw-bolder" id="title_text">레벨테스트</h1>
+            <p class="lead">선택한 자격증에 대한 학습자의 실력을 테스트 할 수 있습니다.</p>
+            <form id="abilitytest" action="{% url 'extest:abilitytest' %}" method="post">
+                {% csrf_token %}
+
+                <div class="things">
+                    <div class="thing1"></div>
+                    <div class="thing2">
+                        <select name="select_value" class="select">
+                            {% for data in DB_QUE %}
+                                <option value="{{ data }}">{{ data.license }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {#                        <div class="thing2">#}
+                    {#                            <select name="select_value">#}
+                    {#                                {% for data in DB_QUE %}#}
+                    {#                                <option value="{{data}}">{{data.license}}</option>#}
+                    {#                                {% endfor %}#}
+                    {#                            </select>#}
+                    {#                        </div>#}
+                    <div class="thing3"></div>
+                    <input id="btn" class="btn btn-lg btn-light" type="button" onclick="abilitytest()" value="테스트 시작">
+                </div>
+            </form>
+        </div>
+    </header>
+
+
+{% endblock %}

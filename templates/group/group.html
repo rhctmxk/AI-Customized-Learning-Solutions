@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+        {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
+    <script>
+        window.setTimeout(function() {
+        $(".alert-auto-dismissible").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); }); }, 4000);
+    </script>
+    {% endif %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="d-flex justify-content-between">
+                <h4 class="m-0 font-weight-bold text-primary">내가 참여중인 스터디</h4>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive-md">
+                <table class="table table-bordered display nowrap" id="studyTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1">멘토</th>
+                        <th class="col-md-8">방 제목</th>
+                        <th class="col-md-2">활동기간</th>
+                        <th class="col-md-1">작성일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for groupuser in groupusers %}
+                        <tr>
+                            <td>{{ groupuser.groupinfoid.mentorid.first_name }}</td>
+                            <td>
+                                <a href="{% url 'group:groupstudy_read' groupuser.groupinfoid.pk_id %}">{{ groupuser.groupinfoid.title }}</a>
+                            </td>
+                            <td>{{ groupuser.groupinfoid.activity_start_date|date:'Y-m-d' }}
+                                ~ {{ groupuser.groupinfoid.activity_end_date|date:'Y-m-d' }}</td>
+                            <td>{{ groupuser.groupinfoid.created_date|date:'Y-m-d' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+
+        <div class="card-header py-3">
+            <div class="d-flex justify-content-between">
+                <h4 class="m-0 font-weight-bold text-primary">스터디 목록</h4>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'group:groupstudy_write' %}"
+                       class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <i class="fas fa-upload fa-sm text-white-50"></i> 글쓰기
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered display nowrap" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1">작성자</th>
+                        <th class="col-md-5">제목</th>
+                        <th class="col-md-2">모집기간</th>
+                        <th class="col-md-2">활동기간</th>
+                        <th class="col-md-1">작성일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for board in boards %}
+                        <tr>
+                            <td>{{ board.userid.first_name }}</td>
+                            <td><a href="{% url 'group:groupstudy_read' board.pk_id %}">{{ board.title }}</a></td>
+                            <td>{{ board.recruitment_start_date|date:'Y-m-d' }}
+                                ~ {{ board.recruitment_end_date|date:'Y-m-d' }}</td>
+                            <td>{{ board.activity_start_date|date:'Y-m-d' }}
+                                ~ {{ board.activity_end_date|date:'Y-m-d' }}</td>
+                            <td>{{ board.created_date|date:'Y-m-d' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

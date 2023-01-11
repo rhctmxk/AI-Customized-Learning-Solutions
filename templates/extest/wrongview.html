@@ -1,0 +1,120 @@
+
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+<script>
+        function wrongstart(){
+            document.getElementById("wrongstart").submit();
+        }
+</script>
+        <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Jua', sans-serif;
+        }
+    </style>
+<div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <div class="d-flex justify-content-between">
+
+                                <h4 class="m-0 font-weight-bold text-primary">오답노트</h4>
+
+                            <div>
+                                <form class="form-inline mr-auto text-white-50 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-white border-2 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                        {% if user.is_authenticated %}
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                        {% endif %}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary" name="board_type" value="boards">전체</button>
+                        <button type="submit" class="btn btn-primary" name="board_type" value="ability">레벨테스트</button>
+                        <button type="submit" class="btn btn-primary" name="board_type" value="free">난이도별 문제풀이</button>
+                        <button type="submit" class="btn btn-primary" name="board_type" value="previous">기출문제</button>
+                        </form>
+
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered display nowrap" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-1">No.</th>
+                                            <th class="col-md-0">자격증명</th>
+                                            <th class="col-md-5">문제풀이 종류</th>
+                                            <th class="col-md-1">문제개수</th>
+                                            <th class="col-md-2">날짜</th>
+                                            <th class="col-md-1">이동</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        {% for board in boards %}
+                                        <tr>
+                                            <td>{{board.DIVISION}}</td>
+                                            <td>정보처리기사</td>
+                                            <td>
+                                                <script>
+                                                  var select = {{board.SELECT}};
+                                                  if ( select == 1 ) {
+                                                    document.write ( '레벨테스트' );
+                                                  } else if ( select == 2 ) {
+                                                    document.write ( '기출문제' );
+                                                  } else if ( select == 3 ) {
+                                                    document.write ( '난이도별 문제풀이' );
+                                                  } else if ( select == 4 ) {
+                                                    document.write ( '오답노트 재풀이' );
+                                                  }
+                                                </script>
+                                            </td>
+                                            <td>{{board.QUE_COUNT}} / {{board.ANSWER_COUNT}}</td>
+                                            <td>{{ board.date_added|date:'Y-m-d H:i' }}</td>
+                                            <td>
+                                                <form id="wrongstart" action="/extest/wrongstart/" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="division" value="{{board.DIVISION}}">
+                                                    <img width=80 height=30 src="/static/extest/link.png" onclick="wrongstart()">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+     </div>
+
+   <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+{% endblock %}
+

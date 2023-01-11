@@ -1,0 +1,500 @@
+{% load static %}
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>AYU</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Jua', sans-serif;
+        }
+    </style>
+    {% block style %}
+    {% endblock %}
+
+</head>
+
+<body id="page-top">
+{% if messages %}
+    {% for message in messages %}
+    <script>
+        var alert = function(msg, type) {
+		swal({
+			title : '',
+			text : msg,
+			type : type,
+			timer : 1500,
+			customClass : 'sweet-size',
+			showConfirmButton : true
+		});
+	}
+    alert('{{message}}', 'error');
+    </script>
+    {% endfor %}
+{% endif %}
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'main:home' %}">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">AYU</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'mypage:license' %}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>자격증 시험정보</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'mypage:home' %}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>마이페이지</span></a>
+        </li>
+        <!-- Divider -->
+        {#            <hr class="sidebar-divider">#}
+
+        <!-- Heading -->
+        <!--            <div class="sidebar-heading">-->
+        <!--                Interface-->
+        <!--            </div>-->
+        <!-- Nav Item - Utilities Collapse Menu -->
+{% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'extest:nonlogin_abilitystart' %}">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>레벨테스트</span></a>
+        </li>
+{% else %}
+                <li class="nav-item">
+            <a class="nav-link" href="{% url 'extest:nonlogin_abilitystart' %}">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>레벨테스트</span></a>
+        </li>
+        {% endif %}
+        <!-- Divider -->
+        {#            <hr class="sidebar-divider">#}
+
+        <!-- Heading -->
+        {#            <div class="sidebar-heading">#}
+        {#                학습#}
+        {#            </div>#}
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        {#            <li class="nav-item">#}
+        {#                <a class="nav-link" href="{% url 'mypage:select_job' %}">#}
+        {#                    <i class="fas fa-fw fa-folder"></i>#}
+        {#                    <span>자격증 선택</span></a>#}
+        {#            </li>#}
+
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'reco:similar_problem' %}">
+                <i class="fas fa-fw fa-table"></i>
+                <span>유사문제 풀이</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+        <div class="sidebar-card d-none d-lg-flex">
+            <a class="btn btn-success btn-sm" href="{% url 'main:homeBefore' %}">처음으로</a>
+        </div>
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                {#                    <!-- Topbar Search -->#}
+                {#                    <form> #}
+                {#                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">#}
+                {#                        <div class="input-group">#}
+                {#                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."#}
+                {#                                aria-label="Search" aria-describedby="basic-addon2">#}
+                {#                            <div class="input-group-append">#}
+                {#                                <button class="btn btn-primary" type="button">#}
+                {#                                    <i class="fas fa-search fa-sm"></i>#}
+                {#                                </button>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </form>#}
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+
+                    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                    <li class="nav-item dropdown no-arrow d-sm-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <!-- Dropdown - Messages -->
+                        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                             aria-labelledby="searchDropdown">
+                            <form class="form-inline mr-auto w-100 navbar-search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-light border-0 small"
+                                           placeholder="Search for..." aria-label="Search"
+                                           aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+
+                    <!-- Nav Item - Alerts -->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <!-- Counter - Alerts -->
+                            <span class="badge badge-danger badge-counter">{{ alert_count }}</span>
+                        </a>
+                        <!-- Dropdown - Alerts -->
+                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="alertsDropdown">
+                            <h6 class="dropdown-header">
+                                알람 Center
+                            </h6>
+                            <form method="post" action="{% url 'mypage:delete_alert' %}">
+                                {% for alert in alerts %}
+                                    <a class="dropdown-item d-flex align-items-center"
+                                       href="{% url 'mypage:delete_alert' %}">
+                                        <div class="mr-3">
+                                            <div class="icon-circle bg-primary">
+                                                <i class="fas fa-file-alt text-white"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="small text-gray-500">{{ alert.date_added }}</div>
+                                            <span class="font-weight-bold">{{ alert.content }}</span>
+                                            <input type="hidden" name="content" value="{{ alert.content }}">
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </form>
+                            {#                            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>#}
+                        </div>
+                    </li>
+
+                    <!-- Nav Item - Messages -->
+                    {#                    <li class="nav-item dropdown no-arrow mx-1">#}
+                    {#                        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"#}
+                    {#                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+                    {#                            <i class="fas fa-envelope fa-fw"></i>#}
+                    {#                            <!-- Counter - Messages -->#}
+                    {#                            <span class="badge badge-danger badge-counter">7</span>#}
+                    {#                        </a>#}
+                    {#                        <!-- Dropdown - Messages -->#}
+                    {#                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"#}
+                    {#                             aria-labelledby="messagesDropdown">#}
+                    {#                            <h6 class="dropdown-header">#}
+                    {#                                Message Center#}
+                    {#                            </h6>#}
+                    {#                            <a class="dropdown-item d-flex align-items-center" href="#">#}
+                    {#                                <div class="dropdown-list-image mr-3">#}
+                    {#                                    <img class="rounded-circle" src="/static/img/undraw_profile_1.svg"#}
+                    {#                                         alt="...">#}
+                    {#                                    <div class="status-indicator bg-success"></div>#}
+                    {#                                </div>#}
+                    {#                                <div class="font-weight-bold">#}
+                    {#                                    <div class="text-truncate">Hi there! I am wondering if you can help me with a#}
+                    {#                                        problem I've been having.#}
+                    {#                                    </div>#}
+                    {#                                    <div class="small text-gray-500">Emily Fowler · 58m</div>#}
+                    {#                                </div>#}
+                    {#                            </a>#}
+                    {#                            <a class="dropdown-item d-flex align-items-center" href="#">#}
+                    {#                                <div class="dropdown-list-image mr-3">#}
+                    {#                                    <img class="rounded-circle" src="/static/img/undraw_profile_2.svg"#}
+                    {#                                         alt="...">#}
+                    {#                                    <div class="status-indicator"></div>#}
+                    {#                                </div>#}
+                    {#                                <div>#}
+                    {#                                    <div class="text-truncate">I have the photos that you ordered last month, how#}
+                    {#                                        would you like them sent to you?#}
+                    {#                                    </div>#}
+                    {#                                    <div class="small text-gray-500">Jae Chun · 1d</div>#}
+                    {#                                </div>#}
+                    {#                            </a>#}
+                    {#                            <a class="dropdown-item d-flex align-items-center" href="#">#}
+                    {#                                <div class="dropdown-list-image mr-3">#}
+                    {#                                    <img class="rounded-circle" src="/static/img/undraw_profile_3.svg"#}
+                    {#                                         alt="...">#}
+                    {#                                    <div class="status-indicator bg-warning"></div>#}
+                    {#                                </div>#}
+                    {#                                <div>#}
+                    {#                                    <div class="text-truncate">Last month's report looks great, I am very happy with#}
+                    {#                                        the progress so far, keep up the good work!#}
+                    {#                                    </div>#}
+                    {#                                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>#}
+                    {#                                </div>#}
+                    {#                            </a>#}
+                    {#                            <a class="dropdown-item d-flex align-items-center" href="#">#}
+                    {#                                <div class="dropdown-list-image mr-3">#}
+                    {#                                    <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"#}
+                    {#                                         alt="...">#}
+                    {#                                    <div class="status-indicator bg-success"></div>#}
+                    {#                                </div>#}
+                    {#                                <div>#}
+                    {#                                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone#}
+                    {#                                        told me that people say this to all dogs, even if they aren't good...#}
+                    {#                                    </div>#}
+                    {#                                    <div class="small text-gray-500">Chicken the Dog · 2w</div>#}
+                    {#                                </div>#}
+                    {#                            </a>#}
+                    {#                            <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>#}
+                    {#                        </div>#}
+                    {#                    </li>#}
+
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if user.is_authenticated %}
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.first_name }}</span>
+                            {% else %}
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">비회원</span>
+                            {% endif %}
+                            <img class="img-profile rounded-circle"
+                                 src="/static/img/undraw_profile.svg">
+                        </a>
+
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            {% if user.is_authenticated %}
+                                <a class="dropdown-item" href="{% url 'accounts:logout' %}" data-toggle="modal"
+                                   data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    로그아웃
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'accounts:member_modify' %}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    회원정보수정
+                                </a>
+                                <a class="dropdown-item" href="{% url 'accounts:change_pw' %}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    비밀번호 변경
+                                </a>
+
+
+                                <a class="dropdown-item" data-toggle="modal" data-target="#deleteModal">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    회원탈퇴
+                                </a>
+                            {% else %}
+                                <!--                                <a class="dropdown-item" href="#">-->
+                                <!--                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>-->
+                                <!--                                    Settings-->
+                                <!--                                </a>-->
+                                <!--                                <a class="dropdown-item" href="#">-->
+                                <!--                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>-->
+                                <!--                                    Activity Log-->
+                                <!--                                </a>-->
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'accounts:login' %}">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    로그인
+                                </a>
+                                <a class="dropdown-item" href="{% url 'accounts:signup' %}">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    회원가입
+                                </a>
+                            {% endif %}
+                        </div>
+                    </li>
+
+                </ul>
+
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                {% block content %}
+
+                {% endblock %}
+    <!-- Channel Plugin Scripts -->
+    <script>
+        (function () {
+            var w = window;
+            if (w.ChannelIO) {
+                return (window.console.error || window.console.log || function () {
+                })('ChannelIO script included twice.');
+            }
+            var ch = function () {
+                ch.c(arguments);
+            };
+            ch.q = [];
+            ch.c = function (args) {
+                ch.q.push(args);
+            };
+            w.ChannelIO = ch;
+
+            function l() {
+                if (w.ChannelIOInitialized) {
+                    return;
+                }
+                w.ChannelIOInitialized = true;
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.async = true;
+                s.src = 'https://cdn.channel.io/plugin/ch-plugin-web.js';
+                s.charset = 'UTF-8';
+                var x = document.getElementsByTagName('script')[0];
+                x.parentNode.insertBefore(s, x);
+            }
+
+            if (document.readyState === 'complete') {
+                l();
+            } else if (window.attachEvent) {
+                window.attachEvent('onload', l);
+            } else {
+                window.addEventListener('DOMContentLoaded', l, false);
+                window.addEventListener('load', l, false);
+            }
+        })();
+        ChannelIO('boot', {
+            "pluginKey": "d9b3b910-d5c7-49a9-9447-9cf422e6fd12"
+        });
+    </script>
+    <!-- End Channel Plugin -->
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>2022 AYU</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">정말 로그아웃하시겠습니까?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">현재 세션을 종료할 준비가 되었으면 "로그아웃"을 선택해주세요.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                <a class="btn btn-primary" href="{% url 'accounts:logout' %}">로그아웃</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{#    회원탈퇴#}
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">정말로 탈퇴하시겠습니까?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">탈퇴를 하시게되면 기존의 학습내용들이 다 날아갑니다. 그래도 탈퇴를 진행하시겠습니까?</div>
+            <div class="modal-footer">
+
+                <form class="user" action="{% url 'accounts:delete' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="password" name="password" class="form-control-sm form-control-user" placeholder="비밀번호">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-primary">회원탈퇴</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+</body>
+
+</html>

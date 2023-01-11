@@ -1,0 +1,5 @@
+시스템의 구성요소로 볼수 없는 것은
+Process
+Feedback
+Maintenance
+Control 

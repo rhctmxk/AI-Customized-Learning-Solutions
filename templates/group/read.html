@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center"
+                 role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        <script>
+            window.setTimeout(function () {
+                $(".alert-auto-dismissible").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        </script>
+    {% endif %}
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="d-flex justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    {{ groupinfo.title }}
+                </h6>
+                <h6 class="m-0 font-weight-bold text-primary">
+                    멘토: {{ groupinfo.mentorid.first_name }}
+                    <div class="text-xs">({{ groupinfo.created_date|date:'Y-m-d H:i:s' }})</div>
+                </h6>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-9">
+                    {{ groupinfo.content }}
+                </div>
+                <div class="col-md-3">
+                    <div class="card mb-0 py-0 border-left-dark">
+                        <div class="card-body">
+                            <p class="mb-0"><strong>모집 기간:</strong> {{ groupinfo.recruitment_start_date|date:'Y-m-d' }}
+                                ~ {{ groupinfo.recruitment_end_date|date:'Y-m-d' }}</p>
+                            <p class="mb-0"><strong>활동 기간:</strong> {{ groupinfo.activity_start_date|date:'Y-m-d' }}
+                                ~ {{ groupinfo.activity_end_date|date:'Y-m-d' }}</p>
+                            <p class="mb-0"><strong>모임 형태:</strong> {{ groupinfo.type }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form method="POST" action="{% url 'group:group_read' groupinfo.pk_id %}">
+        {% csrf_token %}
+        {% if current_user == groupinfo.mentorid %}
+            <div class="d-md-inline-flex">
+                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"
+                   href="{% url 'group:group_modify' groupinfo.pk_id %}">
+                    <i class="fas fa-pencil-ruler fa-sm text-white-100"></i> 수정
+                </a>
+                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2" href="#" data-toggle="modal"
+                   data-target="#deleteModal">
+                    <i class="fas fa-trash fa-sm text-white-100"></i> 삭제
+                </a>
+            </div>
+        {% endif %}
+        <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2"
+           href="{% url 'group:group_download' groupinfo.pk_id %}">
+            <i class="fas fa-download fa-sm text-white-100"></i> 다운로드
+        </a>
+    </form>
+
+
+    <form method="POST" action="{% url 'group:group_user_manage' groupinfo.pk_id %}">
+        {% csrf_token %}
+        <div class="row mt-4">
+            {% if current_user == groupinfo.mentorid and is_waiting.count > 0 %}
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <a href="#waiting" class="card-header py-3" data-toggle="collapse"
+                           role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                            <h6 class="m-0 font-weight-bold text-primary">신청자</h6>
+                        </a>
+                        <div class="collapse show" id="waiting">
+                            <div class="card-body">
+                                {% for iw in is_waiting %}
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <h6><strong>{{ iw.userid.first_name }}</strong></h6>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                    type="submit" id="registerUser" name="registerUser"
+                                                    value="{{ iw.userid.id }}">
+                                                <i class="fas fa-check fa-sm text-white-50"></i> 승인
+                                            </button>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm"
+                                                    type="submit" id="rejectUser" name="rejectUser"
+                                                    value="{{ iw.userid.id }}">
+                                                <i class="fas fa-stop fa-sm text-white-50"></i> 거절
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <a href="#registered" class="card-header py-3" data-toggle="collapse"
+                       role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                        <h6 class="m-0 font-weight-bold text-primary">참여자</h6>
+                    </a>
+                    <div class="collapse show" id="registered">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <h6><strong>{{ groupinfo.mentorid.first_name }}</strong><small>[멘토]</small></h6>
+                                </div>
+                            </div>
+                            <hr>
+                            {% for ir in is_registered %}
+                                {% if groupinfo.mentorid != ir.userid %}
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <h6><strong>{{ ir.userid.first_name }}</strong></h6>
+                                        </div>
+
+                                        {% if current_user == groupinfo.mentorid %}
+                                            <div class="col-md-1">
+                                                <button class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm"
+                                                        type="submit" id="deleteUser" name="deleteUser"
+                                                        value="{{ ir.userid.id }}">
+                                                    <i class="fas fa-trash fa-sm text-white-50"></i> 삭제
+                                                </button>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                        type="submit" id="mentorUser" name="mentorUser"
+                                                        value="{{ ir.userid.id }}">
+                                                    <i class="fas fa-check fa-sm text-white-50"></i> 멘토
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <hr>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="card shadow mt-4 mb-4">
+        <div class="card-header py-3">
+            <div class="d-flex justify-content-between">
+                <h4 class="m-0 font-weight-bold text-primary">토론방</h4>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'group:group_board_write' groupinfo.pk_id %}"
+                       class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <i class="fas fa-upload fa-sm text-white-50"></i> 글쓰기
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive-md">
+                <table class="table table-bordered display nowrap" id="groupBoard" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1">글쓴이</th>
+                        <th class="col-md-10">주제</th>
+                        <th class="col-md-1">작성일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for groupboard in groupboards %}
+                        <tr>
+                            <td>{{ groupboard.userid.first_name }}</td>
+                            <td>
+                                <a href="{% url 'group:group_board_read' groupinfo.pk_id groupboard.pk_id %}">{{ groupboard.title }}</a>
+                            </td>
+                            <td>{{ groupboard.created_date|date:'Y-m-d' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

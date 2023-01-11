@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+    <style>
+        header{
+            width:100%; height:100%;
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://cdn.pixabay.com/photo/2022/11/04/05/50/city-7569067_960_720.jpg");
+            background-position: center;
+            background-size: cover;
+        }
+        #title{
+            position:absolute;
+            left:55%;
+            top:50%;
+            transform:translate(-50%,-50%);
+        }
+
+        #title_text{
+            margin-bottom:30px;
+        }
+        #subtitle{
+            margin-bottom:80px;
+        }
+        .lead{
+            font-size:15px;
+        }
+
+        .btn btn-lg btn-light{
+            float:left;
+        }
+
+    </style>
+
+    <script>
+        var num_check;
+
+        function getwrong(){
+            alert("오답노트 페이지로 이동합니다.");
+            document.getElementById("wrongtest").submit();
+        }
+
+        function getreview(frm){
+
+<!--            var str = document.getElementsByName("select_value").value;-->
+<!--            alert(str);-->
+<!--            document.getElementsByName("select").value = "2345";-->
+
+
+<!--            alert("리뷰 페이지로 이동합니다.");-->
+<!--            document.getElementById("wrongreview").submit();-->
+
+            alert("리뷰 페이지로 이동합니다.");
+            frm.action="{% url 'extest:wrongreview' %}";
+            frm.submit();
+            return true;
+        }
+    </script>
+
+<link href="static/extest/css/styles.css" rel="stylesheet" />
+
+<header class="bg-primary bg-gradient text-white">
+            <div class="container px-4 text-center" id="title">
+                <h1 class="fw-bolder" id="title_text">오답노트</h1>
+                <p class="lead">풀었던 문제집을 선택해서 다시 풀어보거나 복습하기 위한 리뷰를 할 수 있습니다.</p>
+                    <form id="wrongtest" action="{% url 'extest:wrongtest' %}" method="post">
+                        {% csrf_token %}
+                        <input name="select_value" type="hidden" value="{{division}}">
+
+                        <input class="btn btn-lg btn-light" type="button" onclick="getwrong()" value="오답노트 시작">
+                        <input class="btn btn-lg btn-light" type="button" onclick="return getreview(this.form);" value="리뷰 시작">
+                    </form>
+
+<!--                    <form id="wrongreview" action="{% url 'extest:wrongreview' %}" method="post">-->
+<!--                        {% csrf_token %}-->
+
+<!--&lt;!&ndash;                        <select name="select_value">&ndash;&gt;-->
+<!--&lt;!&ndash;                        {% for data in division %}&ndash;&gt;-->
+<!--&lt;!&ndash;                            <option value="{{data}}">{{data}}</option>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;                        </select>&ndash;&gt;-->
+
+<!--                        <input type="hidden" value="1234" name="select">-->
+<!--                        <input class="btn btn-lg btn-light" type="button" onclick="getreview()" value="리뷰 시작">-->
+<!--                    </form>-->
+            </div>
+</header>
+
+
+
+
+{% endblock %}

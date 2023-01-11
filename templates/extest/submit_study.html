@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script>
+        function abilitystart(){
+            alert("능력테스트 페이지로 이동합니다.");
+            document.getElementById("abilitystart").submit();
+        }
+
+        function previousstart(){
+            alert("기출문제풀이 페이지로 이동합니다.");
+            document.getElementById("previousstart").submit();
+        }
+
+        function omrstart(){
+            alert("난이도/능력별 문제풀이 페이지로 이동합니다.");
+            document.getElementById("omrstart").submit();
+        }
+
+        function wrongstart(){
+            alert("오답노트 페이지로 이동합니다.");
+            document.getElementById("wrongstart").submit();
+        }
+    </script>
+        <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Jua', sans-serif;
+        }
+    </style>
+</head>
+<body>
+  <script>
+        var count = {{count}};
+        var que_count = {{que_count}};
+
+        alert(que_count + "문제중 " + count + "문제 정답입니다.");
+  </script>
+
+  <form id="abilitystart" action="{% url 'extest:abilitystart' %}" method="post">
+        {% csrf_token %}
+        <input type="button" onclick="abilitystart()" value="능력테스트">
+    </form>
+
+    <form id="previousstart" action="{% url 'extest:previousstart' %}" method="post">
+        {% csrf_token %}
+        <input type="button" onclick="previousstart()" value="문제풀이">
+    </form>
+
+    <form id="omrstart" action="{% url 'extest:omrstart' %}" method="post">
+        {% csrf_token %}
+        <input type="button" onclick="omrstart()" value="난이도/능력별 문제풀이">
+    </form>
+
+    <form id="wrongstart" action="{% url 'extest:wrongstart' %}" method="post">
+        {% csrf_token %}
+        <input type="button" onclick="wrongstart()" value="오답노트">
+    </form>
+</body>
+</html>

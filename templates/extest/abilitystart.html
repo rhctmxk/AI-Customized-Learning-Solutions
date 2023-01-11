@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+    <script>
+        function abilitytest(){
+            alert("레벨테스트 페이지로 이동합니다.");
+            document.getElementById("abilitytest").submit();
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        header{
+            width:100%; height:100%;
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://cdn.pixabay.com/photo/2022/11/04/05/50/city-7569067_960_720.jpg");
+            background-position: center;
+            background-size: cover;
+        }
+        #title{
+            position:absolute;
+            left:55%;
+            top:50%;
+            transform:translate(-50%,-50%);
+        }
+
+        #title_text{
+            margin-bottom:30px;
+        }
+        #subtitle{
+            margin-bottom:80px;
+        }
+        .lead{
+            font-size:15px;
+        }
+
+        .things{
+        }
+
+        .thing1{
+            width:35%;
+            height:160px;
+            float:left;
+        }
+
+        .thing2{
+            float:left;
+            width:28%;
+            height:100%;
+            margin-left:50px;
+        }
+
+        .thing3{
+            float:left;
+            width:32%;
+            height:160px;
+        }
+        #btn{
+            margin-top:20px;
+        }
+    </style>
+
+<link href="static/extest/css/styles.css" rel="stylesheet" />
+
+<header class="bg-primary bg-gradient text-white">
+            <div class="container px-4 text-center" id="title">
+                <h1 class="fw-bolder" id="title_text">레벨테스트</h1>
+                <p class="lead">선택한 자격증에 대한 학습자의 실력을 테스트 할 수 있습니다.</p>
+                    <form id="abilitytest" action="{% url 'extest:abilitytest' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="things">
+                        <div class="thing1"></div>
+                        <div class="thing2">
+                            <div align="left">
+                                  <input type="checkbox" id="subject1" name="subject" value="1" class="subject" checked>
+                                  <label for="subject1">1과목 : 소프트웨어 설계</label>
+                            </div>
+                            <div align="left">
+                                  <input type="checkbox" id="subject2" name="subject" value="2" class="subject" checked>
+                                  <label for="subject2">2과목 : 소프트웨어 개발</label>
+                            </div>
+                            <div align="left">
+                                  <input type="checkbox" id="subject3" name="subject" value="3" class="subject" checked>
+                                  <label for="subject3">3과목 : 데이터베이스 구축</label>
+                            </div>
+                            <div align="left">
+                                  <input type="checkbox" id="subject4" name="subject" value="4" class="subject" checked>
+                                  <label for="subject4">4과목 : 프로그래밍 언어 활용</label>
+                            </div>
+                            <div align="left">
+                                  <input type="checkbox" id="subject5" name="subject" value="5" class="subject" checked>
+                                  <label for="subject5">5과목 : 정보시스템 구축관리</label>
+                            </div>
+                        </div>
+                        <div class="thing3"></div>
+                        <input id="btn" class="btn btn-lg btn-light" type="button" onclick="abilitytest()" value="테스트 시작">
+                    </div>
+                    </form>
+            </div>
+</header>
+
+
+{% endblock %}

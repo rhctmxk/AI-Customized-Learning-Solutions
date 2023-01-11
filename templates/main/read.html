@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+{% endfor %}
+<script>
+    window.setTimeout(function() {
+    $(".alert-auto-dismissible").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove(); }); }, 4000);
+</script>
+{% endif %}
+
+
+                    <!-- DataTales Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">
+                                        {{ post.pk_id }}. {{ post.title }}
+                                    </h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">
+                                        작성자: {{ post.user_id.first_name }}
+                                        <div class="text-xs">({{ post.created_date|date:'Y-m-d H:i:s' }})</div>
+                                    </h6>
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        {{ post.content }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card mb-0 py-0 border-left-dark">
+                                            <div class="card-body">
+{{ upload_file }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form method="POST" action="{% url 'main:community_read' post.pk_id %}">
+                        {% csrf_token %}
+                        {% if currentuser.username == post.user_id.username %}
+                        <div class="d-md-inline-flex">
+                                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2" href="{% url 'main:community_modify' post.pk_id %}">
+                                    <i class="fas fa-pencil-ruler fa-sm text-white-100"></i> 수정
+                                </a>
+                                <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2" href="{% url 'main:community_delete' post.pk_id %}" data-toggle="modal" data-target="#comunityDeleteModal">
+                                    <i class="fas fa-trash fa-sm text-white-100"></i> 삭제
+                                </a>
+                        </div>
+                        {% endif %}
+
+                        {% if post.filepath != '' %}
+                            <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2" href="{% url 'main:community_download' post.pk_id %}">
+                                <i class="fas fa-download fa-sm text-white-100"></i> 다운로드
+                            </a>
+                        {% endif %}
+                        </form>
+                        <div class="card shadow mb-4 mt-4">
+                            <!-- Card Header - Accordion -->
+                            <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
+                                role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                <h6 class="m-0 font-weight-bold text-primary">댓글</h6>
+                            </a>
+                            <!-- Card Content - Collapse -->
+                            <div class="collapse show" id="collapseCardExample">
+                                <div class="card-body">
+                                    <form method="POST" action="{% url 'main:community_comment_write' post.pk_id %}">
+                                    {% csrf_token %}
+                                    <input type="text" class="form-control mb-4" id="communityComment" placeholder="댓글을 작성해주세요." name="comment" required>
+                                    <div class="d-flex justify-content-md-center">
+                                        <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="submit" id="commentWrite">
+                                            <i class="fas fa-check fa-sm text-white-50"></i> 등록
+                                        </button>
+                                    </div>
+                                    </form>
+                                    {% for comment in comments %}
+                                    <hr class="sidebar-divider mt-4">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <h6 class="m-0 font-weight-bold text-primary">
+                                            {% if comment.user_id.first_name == post.user_id.first_name %}
+                                                <strong>{{ comment.user_id.first_name }}</strong><span class="text-xs"> [글쓴이]</span>
+                                            {% else %}
+                                                <strong>{{ comment.user_id.first_name }}</strong>
+                                            {% endif %}
+                                            <div class="text-xs">({{ comment.created_date|date:'Y-m-d H:i:s' }})</div>
+                                            </h6>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="d-flex justify-content-end">
+                                            {% if currentuser.first_name == comment.user_id.first_name %}
+                                            <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-2" href="#" data-toggle="modal" data-target="#commentDeleteModal">
+                                                <i class="fas fa-trash fa-sm text-white-100"></i> 삭제
+                                            </a>
+                                            <div class="modal fade" id="commentDeleteModal" tabindex="-1" role="dialog" aria-labelledby="commentDeleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">경고</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">삭제 하시겠습니까?</div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                                                            <a class="btn btn-primary" href="{% url 'main:community_comment_delete' post.pk_id comment.pk_id %}">삭제</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-md">
+                                        <h6 class="mt-2">{{ comment.content }}</h6>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                                                <div class="modal fade" id="comunityDeleteModal" tabindex="-1" role="dialog" aria-labelledby="commentDeleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">경고</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">삭제 하시겠습니까?</div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                                                            <a class="btn btn-primary" href="{% url 'main:community_delete' post.pk_id %}">삭제</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+{% endblock %}

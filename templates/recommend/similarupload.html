@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+    <script>
+        function setThumbnail(event) {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                var img = document.createElement("img");
+                img.setAttribute("src", event.target.result);
+                document.querySelector("div#image_container").appendChild(img);
+            };
+
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Jua', sans-serif;
+        }
+    </style>
+    <div class="container" style="position:relative; left:400px; top:100px;">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <br><br>
+            <h1>유사문제 업로드</h1><br>
+            <div class="col-md-3">
+                <label for="formFileMultiple" class="custom-file-label">파일 업로드</label>
+                <input type="file" class="custom-file-input mb-4" id="image" name="imgfile" accept="image/*"
+                       onchange="setThumbnail(event);"><br>
+            </div>
+            1~5 사이의 문제의 개수를 입력해주세요.
+            <div class="col-sm-4"><input type="text" class="form-control form-control-user" maxlength="1" id="count" style="position:relative; right:10px; width:280px;"
+                                         name="count" onKeyup="this.value=this.value.replace(/[^1-5]/g,'');"/></div>
+            <br><br>
+
+            <div id="image_container"></div>
+
+            <input type="submit" class="btn btn-primary col-3" value="제출">
+        </form>
+    </div>
+{% endblock %}

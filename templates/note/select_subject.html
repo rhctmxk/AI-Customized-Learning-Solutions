@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if first_name_blank %}
+        <script type="text/javascript">
+            var alert = function (msg, type) {
+                swal({
+                    title: '',
+                    text: msg,
+                    type: type,
+                    timer: 1500,
+                    customClass: 'sweet-size',
+                    showConfirmButton: false
+                });
+            }
+
+            alert('닉네임을 입력해주세요.', 'error');
+
+
+        </script>
+    {% endif %}
+
+    <style>
+        #all{
+            height:82%;
+        }
+    </style>
+<div id="all">
+    <div class="row">
+        <!-- Earnings (Annual) Card Example -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                1과목
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">소프트웨어 설계</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{% url 'note:note_subject1' %}"
+                               class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                <i class="fas fa-check fa-2x text-gray-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                2과목
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">소프트웨어 개발</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{% url 'note:note_subject2' %}"
+                               class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                <i class="fas fa-check fa-2x text-gray-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                3과목
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">데이터베이스 구축</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{% url 'note:note_subject3' %}"
+                               class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                <i class="fas fa-check fa-2x text-gray-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                4과목
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">프로그래밍 언어 활용</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{% url 'note:note_subject4' %}"
+                               class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                <i class="fas fa-check fa-2x text-gray-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                5과목
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">정보시스템 구축 관리</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{% url 'note:note_subject5' %}"
+                               class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                <i class="fas fa-check fa-2x text-gray-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+<!--    <div class="d-sm-flex align-items-center justify-content-between mb-4">-->
+<!--        <h1 class="h3 mb-0 text-gray-800">찜목록</h1>-->
+<!--    </div>-->
+
+    <div class="row">
+        <!-- Earnings (Annual) Card Example -->
+        {% if subject_1 %}
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    1과목
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">소프트웨어 설계</div>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{% url 'mypage:my_subject1' %}"
+                                   class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                    <i class="fas fa-check fa-2x text-gray-300"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if subject_2 %}
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    2과목
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">소프트웨어 개발</div>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{% url 'mypage:my_subject2' %}"
+                                   class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                    <i class="fas fa-check fa-2x text-gray-300"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if subject_3 %}
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    3과목
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">데이터베이스 구축</div>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{% url 'mypage:my_subject3' %}"
+                                   class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                    <i class="fas fa-check fa-2x text-gray-300"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if subject_4 %}
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    4과목
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">프로그래밍 언어 활용</div>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{% url 'mypage:my_subject4' %}"
+                                   class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                    <i class="fas fa-check fa-2x text-gray-300"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if subject_5 %}
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    5과목
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">정보시스템 구축 관리</div>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{% url 'mypage:my_subject5' %}"
+                                   class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" target="_blank">
+                                    <i class="fas fa-check fa-2x text-gray-300"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        {% endif %}
+{% endblock %}
+    </div>

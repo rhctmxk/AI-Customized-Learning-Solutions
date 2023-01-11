@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+
+      height: 75px;
+      padding: 1rem;
+      color: white;
+      background: teal;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1, p {
+      margin: 0;
+    }
+
+    main {
+      padding: 1rem;
+      height: 100%;
+    }
+
+    body {
+      padding-top: 75px;
+      background: #EEE;
+    }
+
+    body, html {
+      height: 200%;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* 슬라이드쇼 컨테이너의 디자인 */
+    .slideshow-container {
+      max-width: 1000px;
+      position: relative;
+      margin: auto;
+    }
+
+    /* 이미지를 숨기는데 사용 */
+    .mySlides {
+        display: none;
+    }
+
+    /* 다음, 이전 버튼 */
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      margin-top: -22px;
+      padding: 16px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.6s ease;
+      border-radius: 0 3px 3px 0;
+    }
+
+    /* "다음 버튼"을 오른쪽에 위치 */
+    .next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+
+    /* 마우스를 올리면 배경색을 변경 */
+    .prev:hover, .next:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+
+    /* 캡션 부분 */
+    .text {
+      color: #f2f2f2;
+      font-size: 15px;
+      padding: 8px 12px;
+      position: absolute;
+      bottom: 8px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* 숫자 부분 위에 적은 (1/3) <-- 이런거 */
+    .numbertext {
+      color: #f2f2f2;
+      font-size: 12px;
+      padding: 8px 12px;
+      position: absolute;
+      top: 0;
+    }
+
+    /* 하단의 점들 */
+    .dot {
+      cursor: pointer;
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.6s ease;
+    }
+
+    .active, .dot:hover {
+      background-color: #717171;
+    }
+
+    /* 페이드 효과 */
+    .fade {
+      -webkit-animation-name: fade;
+      -webkit-animation-duration: 1.5s;
+      animation-name: fade;
+      animation-duration: 1.5s;
+    }
+
+    @-webkit-keyframes fade {
+      from {opacity: .4}
+      to {opacity: 1}
+    }
+
+    @keyframes fade {
+      from {opacity: .4}
+      to {opacity: 1}
+    }
+<!--가로 슬라이드 넘기기-->
+ul,li{list-style:none;}
+    .slide{height:300px;overflow:hidden;}
+    .slide ul{width:calc(100% * 3);display:flex;animation:slide 8s infinite;} /* slide를 8초동안 진행하며 무한반복 함 */
+    .slide li{width:calc(100% / 3);height:300px;}
+    .slide li:nth-child(1){background:#ffa;}
+    .slide li:nth-child(2){background:#faa;}
+    .slide li:nth-child(3){background:#afa;}
+<!--    .slide li:nth-child(4){background:#aaf;}-->
+    @keyframes slide {
+      0% {margin-left:0;} /* 0 ~ 10  : 정지 */
+      10% {margin-left:0;} /* 10 ~ 25 : 변이 */
+      25% {margin-left:-100%;} /* 25 ~ 35 : 정지 */
+      35% {margin-left:-100%;} /* 35 ~ 50 : 변이 */
+      50% {margin-left:-200%;}
+      60% {margin-left:-200%;}
+<!--      75% {margin-left:-300%;}-->
+<!--      85% {margin-left:-300%;}-->
+      100% {margin-left:-200%;}
+    }
+
+
+</style>
+        <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Jua', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <header>
+      <h1>Brand</h1>
+      <nav>
+        <span>Menu1</span>
+        <span>Menu2</span>
+        <span>Menu3</span>
+      </nav>
+    </header>
+
+    <p>This is the main area.</p>
+    <p>This is the main area.</p>
+    <p>This is the main area.</p>
+    <p>This is the main area.</p>
+    <p>This is the main area.</p>
+    <p>This is the main area.</p>
+    <p>This is the main area.</p>
+    <p>This is the main area.</p>
+    <p>This is the main area.</p>
+    <p>This is the main area.</p>
+
+    <!-- 슬라이드쇼 컨테이너 -->
+    <div class="slideshow-container">
+      <!-- 숫자와 캡션이 있는 이미지 -->
+      <div class="mySlides fade">
+        <div class="numbertext">1 / 3</div>
+        <img src="/static/extest/img1.jpg" style="width:100%" alt="없음">
+        <div class="text">첫 번째 사진</div>
+      </div>
+
+      <div class="mySlides fade">
+        <div class="numbertext">2 / 3</div>
+        <img src="/static/extest/img2.jpg" style="width:100%">
+        <div class="text">두 번째 사진</div>
+      </div>
+
+      <div class="mySlides fade">
+        <div class="numbertext">3 / 3</div>
+        <img src="/static/extest/img3.jpg" style="width:100%">
+        <div class="text">세 번째 사진</div>
+      </div>
+
+      <!-- 다음, 이전 이미지 버튼 -->
+      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    <br>
+
+    <!-- 현재 이미지를 알려주는 하단의 점 -->
+    <div style="text-align:center">
+      <span class="dot" onclick="currentSlide(1)"></span>
+      <span class="dot" onclick="currentSlide(2)"></span>
+      <span class="dot" onclick="currentSlide(3)"></span>
+    </div>
+
+    <div class="slide">
+        <ul>
+          <li><img src="/static/extest/img1.jpg" style="width:100%" alt="없음"></li>
+          <li><img src="/static/extest/img2.jpg" style="width:100%" alt="없음"></li>
+          <li><img src="/static/extest/img3.jpg" style="width:100%" alt="없음"></li>
+        </ul>
+    </div>
+
+
+    <script>
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        // 다음, 이전 제어
+        function plusSlides(n) {
+          showSlides(slideIndex += n);
+        }
+
+        // 사진 제어
+        function currentSlide(n) {
+          showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+          var i;
+          var slides = document.getElementsByClassName("mySlides");
+          var dots = document.getElementsByClassName("dot");
+          if (n > slides.length) {slideIndex = 1}
+          if (n < 1) {slideIndex = slides.length}
+          for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";
+          }
+          for (i = 0; i < dots.length; i++) {
+              dots[i].className = dots[i].className.replace(" active", "");
+          }
+          slides[slideIndex-1].style.display = "block";
+          dots[slideIndex-1].className += " active";
+        }
+
+
+    </script>
+</body>
+</html>
